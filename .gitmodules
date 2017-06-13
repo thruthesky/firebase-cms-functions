@@ -1,0 +1,3 @@
+[submodule "functions/firebase-cms"]
+	path = functions/firebase-cms
+	url = https://github.com/thruthesky/firebase-cms

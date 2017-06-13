@@ -7,15 +7,32 @@ var app = admin.initializeApp({
     databaseURL: "https://test-ec3e3.firebaseio.com"
 });
 var db = app.database();
-var post_1 = require("./model/post");
+var forum_1 = require("./firebase-cms/src/model/forum/forum");
 var AppTest = (function () {
     function AppTest() {
-        this.root = db.ref();
-        this.post = new post_1.Post({ root: this.root });
+        this.root = db.ref('/');
+        this.forum = new forum_1.Forum(this.root);
+        this.forum.debugPath = 'a/';
         this.run();
     }
     AppTest.prototype.run = function () {
-        this.createPost();
+        var _this = this;
+        this.createCategory(function () { return _this.createPost(); });
+    };
+    AppTest.prototype.createCategory = function (callback) {
+        var count = 0;
+        var no = this.testCreateCategory().length;
+        for (var _i = 0, _a = this.testCreateCategory(); _i < _a.length; _i++) {
+            var c = _a[_i];
+            this.forum.createCategory(c, function () {
+                count++;
+                console.log("create category: ", count);
+                if (count >= no) {
+                    console.log("All category created: ");
+                    callback();
+                }
+            }, function (e) { return console.log(e); });
+        }
     };
     AppTest.prototype.createPost = function () {
         var _this = this;
@@ -23,9 +40,11 @@ var AppTest = (function () {
             subject: this.testSubject(),
             uid: 'abc'
         };
-        this.post.create(this.testPostData(), function (post) {
+        this.forum.createPost(this.testPostData(), function (post) {
             console.log("Post created: ", post);
-            _this.post.setCategoryPostRelation(post.key, post);
+            _this.forum.setCategoryPostRelation(post.key, post)
+                .then(function () {
+            });
         }, function (e) { return console.error(e); });
     };
     AppTest.prototype.testPostData = function () {
@@ -51,8 +70,17 @@ var AppTest = (function () {
         return {
             movie: true,
             music: true,
-            qna: false
+            qna: false,
+            noexist: true
         };
+    };
+    AppTest.prototype.testCreateCategory = function () {
+        return [
+            { id: 'movie', name: 'Movie', description: "Let's go to Movie!", owner: 'thruthesky' },
+            { id: 'music', name: 'Music', description: "Play music", owner: 'eunsu' },
+            { id: 'play', name: 'Play', description: "Play with me", owner: 'thruthesky' },
+            { id: 'game', name: 'Game', description: "Lineage game!", owner: 'lineage' }
+        ];
     };
     return AppTest;
 }());

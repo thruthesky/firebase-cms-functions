@@ -7,43 +7,73 @@ const app = admin.initializeApp({
 });
 const db = app.database();
 
-import { Post, POST } from './model/post';
+//import { Post, POST } from './model/post';
+
+import { Forum } from './firebase-cms/src/model/forum/forum';
+import { POST } from './firebase-cms/src/model/forum/forum.interface';
+
 
 
 
 class AppTest {
 
   root;
-  post: Post;
+  forum: Forum;
   constructor() {
-
-    this.root = db.ref();
-
-    this.post = new Post( { root: this.root } );
+    this.root = db.ref('/');
+    this.forum = new Forum( this.root );
+    this.forum.debugPath = 'a/';
     this.run();
-
   }
-
 
   run() {
-    this.createPost();
+    this.createCategory(() => this.createPost() );
+    
   }
 
+
+  /**
+   * 
+   * Create test categories.
+   * 
+   * @param callback 
+   */
+  createCategory( callback ) {
+    let count = 0;
+    let no = this.testCreateCategory().length;
+    for( let c of this.testCreateCategory() ) {
+      this.forum.createCategory( c, () => {
+        count ++;
+        console.log("create category: ", count);
+        if ( count >= no ) {
+          console.log("All category created: ");
+          callback();
+        }
+      }, e => console.log( e ) );
+    }
+  }
 
   createPost() {
     let post: POST = {
       subject: this.testSubject(),
       uid: 'abc'
     };
-    this.post.create( this.testPostData(), post => {
+    this.forum.createPost( this.testPostData(), post => {
       console.log( "Post created: ", post);
 
-      this.post.setCategoryPostRelation( post.key, post );
-
+      this.forum.setCategoryPostRelation( post.key, post )
+        .then(() => {
+            // @todo check if success or false.
+        });
 
     }, e => console.error(e) );
   }
 
+
+
+
+
+  // extras
 
 
   testPostData() : POST {
@@ -71,8 +101,18 @@ class AppTest {
     return {
       movie: true,
       music: true,
-      qna: false
+      qna: false,
+      noexist: true
     };
+  }
+
+  testCreateCategory() {
+    return [
+      { id: 'movie', name: 'Movie', description: "Let's go to Movie!", owner: 'thruthesky' },
+      { id: 'music', name: 'Music', description: "Play music", owner: 'eunsu' },
+      { id: 'play', name: 'Play', description: "Play with me", owner: 'thruthesky' },
+      { id: 'game', name: 'Game', description: "Lineage game!", owner: 'lineage' }
+    ];
   }
 }
 
