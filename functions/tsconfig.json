@@ -1,0 +1,14 @@
+{
+  "exclude": [
+    "node_modules"
+  ],
+    "compilerOptions": {
+        "target": "es5",
+        "watch": true,
+        "sourceMap": true,
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false
+    }
+}
