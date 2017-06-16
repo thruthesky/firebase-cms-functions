@@ -1,4 +1,4 @@
-{
+export default {
   "type": "service_account",
   "project_id": "test-ec3e3",
   "private_key_id": "f711c80c6922dee7c18802770e7574ec0efb15f7",
