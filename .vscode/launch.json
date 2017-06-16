@@ -12,6 +12,12 @@
             "outFiles": [
                 "${workspaceRoot}/**/*.js"
             ]
+        },
+        {
+            "name": "Debug Function",
+            "type": "node",
+            "request": "attach",
+            "port": 5858
         }
     ]
 }

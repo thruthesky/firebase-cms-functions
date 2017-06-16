@@ -15,15 +15,10 @@ import { POST, CATEGORY } from './firebase-cms/src/model/forum/forum.interface';
 import { ERROR, isError } from './firebase-cms/src/error';
 import * as chalk from 'chalk';
 
-
-
 function datetime() {
   let d = new Date();
   return d.getMonth() + '-' + d.getDate() + ':' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 }
-
-
-
 
 /**
  * @todo with different user auth. anonymous, user, admin.
@@ -43,15 +38,13 @@ class AppTest {
     this.run();
   }
 
-
-
   async run() {
 
     this.log("TEST BEGIN at: " + (new Date).getMinutes() + ':' + (new Date).getSeconds() );
 
     let re;
 
-    await this.testCategoryIDFormat();
+    // await this.testCategoryIDFormat();
     await this.testCategory();
     await this.testPost();
 
@@ -60,9 +53,7 @@ class AppTest {
     // user auth test each different users.
     // user block test
 
-
-
-    console.log( `tests: ${ this.successCount + this.errorCount }, successes: ${ this.successCount }, errors: ${ this.errorCount }`);
+    console.log( `Tests: ${ this.successCount + this.errorCount }, successes: ${ this.successCount }, errors: ${ this.errorCount }`);
   }
 
 

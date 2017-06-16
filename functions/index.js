@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var functions = require("firebase-functions");
-var post_1 = require("./model/post");
+var forum_1 = require("./firebase-cms/src/model/forum/forum");
 exports.categoryPost = functions.database.ref('/forum/post/data/{pushId}')
     .onWrite(function (event) {
     console.log("pushId", event.params.pushId);
@@ -9,7 +9,7 @@ exports.categoryPost = functions.database.ref('/forum/post/data/{pushId}')
     var data = event.data.val();
     var key = event.data.key;
     data['key'] = key;
-    var post = new post_1.Post({ root: event.data.adminRef.root });
+    var post = new forum_1.Forum(event.data.adminRef.root);
     return post.setCategoryPostRelation(key, data);
 });
 //# sourceMappingURL=index.js.map

@@ -66,16 +66,13 @@ var AppTest = (function () {
                 switch (_a.label) {
                     case 0:
                         this.log("TEST BEGIN at: " + (new Date).getMinutes() + ':' + (new Date).getSeconds());
-                        return [4 /*yield*/, this.testCategoryIDFormat()];
+                        return [4 /*yield*/, this.testCategory()];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.testCategory()];
+                        return [4 /*yield*/, this.testPost()];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, this.testPost()];
-                    case 3:
-                        _a.sent();
-                        console.log("tests: " + (this.successCount + this.errorCount) + ", successes: " + this.successCount + ", errors: " + this.errorCount);
+                        console.log("Tests: " + (this.successCount + this.errorCount) + ", successes: " + this.successCount + ", errors: " + this.errorCount);
                         return [2 /*return*/];
                 }
             });

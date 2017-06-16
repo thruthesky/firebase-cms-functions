@@ -1,21 +1,20 @@
-
 import * as functions from 'firebase-functions';
 
-import { Post } from './model/post';
+import { Forum } from './firebase-cms/src/model/forum/forum';
+
 
 exports.categoryPost = functions.database.ref('/forum/post/data/{pushId}')
-    .onWrite( event => {
+    .onWrite(event => {
         console.log("pushId", event.params.pushId);
         console.log("data", event.data.val());
-        
+
 
         let data = event.data.val();
         let key = event.data.key;
         data['key'] = key;
-        
 
-        let post = new Post( { root: event.data.adminRef.root } );
+        let post = new Forum(event.data.adminRef.root);
 
-        return post.setCategoryPostRelation( key, data );
+        return post.setCategoryPostRelation(key, data);
 
     });
